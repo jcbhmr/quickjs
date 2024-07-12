@@ -346,6 +346,8 @@ add_executable(test_conv
 
 # CTest
 enable_testing()
+
+# On Windows and Emscripten this target doesn't exist.
 if(TARGET run-test262)
     add_test(
         NAME "run-test262"
@@ -353,6 +355,7 @@ if(TARGET run-test262)
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     )
 endif()
+
 add_test(
     NAME "test_conv"
     COMMAND test_conv
