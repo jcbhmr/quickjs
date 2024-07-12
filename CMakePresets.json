@@ -28,6 +28,11 @@
     },
     {
       "name": "wasm32-emscripten",
+      "condition": {
+        "type": "notEquals",
+        "lhs": "$env{EMSDK}",
+        "rhs": ""
+      },
       "binaryDir": "build/wasm32-emscripten",
       "toolchainFile": "$env{EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
       "cacheVariables": {

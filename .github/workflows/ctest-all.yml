@@ -60,8 +60,7 @@ jobs:
           "x86_64-linux-musl",
           # "x86_64-windows-gnu",
           # "x86_64-macos-none",
-          
-          "wasm32-emscripten", # Separate Emscripten toolchain.
+          "wasm32-emscripten",
         ]
     runs-on: ubuntu-latest
     env:
@@ -72,6 +71,8 @@ jobs:
           submodules: recursive
       - uses: jwlawson/actions-setup-cmake@v2
       - uses: goto-bus-stop/setup-zig@v2
+      - if: matrix.target == 'wasm32-emscripten'
+        uses: mymindstorm/setup-emsdk@v14
       - uses: actions/cache@v4
         with:
           key: ${{ runner.os }}-${{ hashFiles('**') }}
