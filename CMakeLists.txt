@@ -9,6 +9,7 @@ project(quickjs
 
 include(CheckCCompilerFlag)
 include(GNUInstallDirs)
+enable_testing()
 
 set(CMAKE_C_VISIBILITY_PRESET hidden)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -258,6 +259,11 @@ if(NOT WIN32 AND NOT EMSCRIPTEN)
     add_qjs_libc_if_needed(run-test262)
     target_compile_definitions(run-test262 PRIVATE ${qjs_defines})
     target_link_libraries(run-test262 ${qjs_libs})
+    add_test(
+        NAME "run-test262"
+        COMMAND run-test262 "-m" "-c" "test262.conf" "-a"
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    )
 endif()
 
 # Unicode generator
@@ -343,19 +349,6 @@ endif()
 add_executable(test_conv
     tests/test_conv.c
 )
-
-# CTest
-enable_testing()
-
-# On Windows and Emscripten this target doesn't exist.
-if(TARGET run-test262)
-    add_test(
-        NAME "run-test262"
-        COMMAND run-test262 "-m" "-c" "test262.conf" "-a"
-        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-    )
-endif()
-
 add_test(
     NAME "test_conv"
     COMMAND test_conv
