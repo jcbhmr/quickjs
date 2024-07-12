@@ -344,6 +344,21 @@ add_executable(test_conv
     tests/test_conv.c
 )
 
+# CTest
+enable_testing()
+if(TARGET run-test262)
+    add_test(
+        NAME "run-test262"
+        COMMAND run-test262 "-m" "-c" "test262.conf" "-a"
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    )
+endif()
+add_test(
+    NAME "test_conv"
+    COMMAND test_conv
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+)
+
 # Install target
 #
 

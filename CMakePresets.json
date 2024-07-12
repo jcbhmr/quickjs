@@ -7,9 +7,21 @@
   },
   "configurePresets": [
     {
+      "name": "default",
+      "binaryDir": "build"
+    },
+    {
+      "name": "wasm32-wasi-musl",
+      "binaryDir": "build/wasm32-wasi-musl",
+      "toolchainFile": "cmake/Zig.cmake",
+      "cacheVariables": {
+        "ZIG_TARGET": "wasm32-wasi-musl"
+      }
+    },
+    {
       "name": "x86_64-linux-musl",
       "binaryDir": "build/x86_64-linux-musl",
-      "toolchainFile": "cmake/zig-cmake-toolchain/toolchain-zig.cmake",
+      "toolchainFile": "cmake/Zig.cmake",
       "cacheVariables": {
         "ZIG_TARGET": "x86_64-linux-musl"
       }
@@ -24,16 +36,26 @@
     }
   ],
   "buildPresets": [
+    { "name": "default", "configurePreset": "default" },
+    { "name": "x86_64-linux-musl", "configurePreset": "x86_64-linux-musl" },
+    { "name": "wasm32-wasi-musl", "configurePreset": "wasm32-wasi-musl" },
+    { "name": "wasm32-emscripten", "configurePreset": "wasm32-emscripten" }
+  ],
+  "testPresets": [
     {
-      "name": "x86_64-linux-musl",
-      "configurePreset": "x86_64-linux-musl"
-    },
-    {
-      "name": "wasm32-emscripten",
-      "configurePreset": "wasm32-emscripten"
+      "name": "default",
+      "configurePreset": "default",
+      "output": { "outputOnFailure": true }
     }
   ],
   "packagePresets": [
+    {
+      "name": "default",
+      "configurePreset": "default",
+      "variables": {
+        "CPACK_PACKAGE_FILE_NAME": "quickjs-ng-DEV"
+      }
+    },
     {
       "name": "x86_64-linux-musl",
       "configurePreset": "x86_64-linux-musl",
@@ -42,43 +64,18 @@
       }
     },
     {
+      "name": "wasm32-wasi-musl",
+      "configurePreset": "wasm32-wasi-musl",
+      "variables": {
+        "CPACK_PACKAGE_FILE_NAME": "quickjs-ng-wasm32-wasi-musl"
+      }
+    },
+    {
       "name": "wasm32-emscripten",
       "configurePreset": "wasm32-emscripten",
       "variables": {
         "CPACK_PACKAGE_FILE_NAME": "quickjs-ng-wasm32-emscripten"
       }
-    }
-  ],
-  "workflowPresets": [
-    {
-      "name": "build:x86_64-linux-musl",
-      "steps": [
-        { "type": "configure", "name": "x86_64-linux-musl" },
-        { "type": "build", "name": "x86_64-linux-musl" }
-      ]
-    },
-    {
-      "name": "package:x86_64-linux-musl",
-      "steps": [
-        { "type": "configure", "name": "x86_64-linux-musl" },
-        { "type": "build", "name": "x86_64-linux-musl" },
-        { "type": "package", "name": "x86_64-linux-musl" }
-      ]
-    },
-    {
-      "name": "build:wasm32-emscripten",
-      "steps": [
-        { "type": "configure", "name": "wasm32-emscripten" },
-        { "type": "build", "name": "wasm32-emscripten" }
-      ]
-    },
-    {
-      "name": "package:wasm32-emscripten",
-      "steps": [
-        { "type": "configure", "name": "wasm32-emscripten" },
-        { "type": "build", "name": "wasm32-emscripten" },
-        { "type": "package", "name": "wasm32-emscripten" }
-      ]
     }
   ]
 }

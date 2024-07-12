@@ -1,0 +1,89 @@
+name: cmake --build <all>
+on:
+  push:
+    branches: ["jcbhmr-patch-1"] # FIXME
+    paths-ignore:
+      - .gitignore
+      - LICENSE
+      - README.md
+      - .github/**
+      - "!.github/workflows/cmake-build-all.yml"
+  pull_request:
+    paths-ignore:
+      - docs/**
+      - examples/**
+      - .gitignore
+      - LICENSE
+      - README.md
+      - .github/**
+      - "!.github/workflows/cmake-build-all.yml"
+  workflow_call:
+concurrency:
+  # https://github.com/orgs/community/discussions/30708
+  group: ${{ github.workflow }}-${{ github.ref }}-cmake-build-all
+  cancel-in-progress: true
+jobs:
+  cmake-build-all:
+    strategy:
+      fail-fast: false
+      matrix:
+        # https://gist.github.com/jcbhmr/ff6abde60ae32de0e33f93ed7445e78e
+        target: [
+          # "aarch64-linux-gnu",
+          # "aarch64-linux-musl",
+          # "aarch64-windows-gnu",
+          # "aarch64-macos-none",
+          # "arm-linux-gnueabi",
+          # "arm-linux-gnueabihf",
+          # "arm-linux-musleabi",
+          # "arm-linux-musleabihf",
+          # "thumb-linux-musleabi",
+          # "thumb-linux-musleabihf",
+          # "x86-linux-gnu",
+          # "x86-linux-musl",
+          # "x86-windows-gnu",
+          # "mips64el-linux-musl",
+          # "mips64-linux-musl",
+          # "mipsel-linux-gnueabi",
+          # "mipsel-linux-gnueabihf",
+          # "mipsel-linux-musl",
+          # "mips-linux-gnueabi",
+          # "mips-linux-gnueabihf",
+          # "mips-linux-musl",
+          # "powerpc64le-linux-gnu",
+          # "powerpc64le-linux-musl",
+          # "powerpc64-linux-gnu",
+          # "powerpc64-linux-musl",
+          # "powerpc-linux-musl",
+          # "riscv64-linux-musl",
+          "wasm32-wasi-musl",
+          # "x86_64-linux-gnu",
+          # "x86_64-linux-gnux32",
+          "x86_64-linux-musl",
+          # "x86_64-windows-gnu",
+          # "x86_64-macos-none",
+          
+          "wasm32-emscripten", # Separate Emscripten toolchain.
+        ]
+    runs-on: ubuntu-latest
+    env:
+      matrix_target: ${{ matrix.target }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: jwlawson/actions-setup-cmake@v2
+      - uses: goto-bus-stop/setup-zig@v2
+      - uses: actions/cache@v4
+        with:
+          key: ${{ runner.os }}-${{ hashFiles('**') }}
+          path: build/${{ matrix.target }}
+      - run: cmake --preset "$matrix_target"
+      - run: cmake --build --preset "$matrix_target"
+      - run: cpack --preset "$matrix_target"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quickjs-${{ matrix.target }}
+          path: |
+            build/${{ matrix.target }}/quickjs-ng-${{ matrix.target }}.tar.gz
+            build/${{ matrix.target }}/quickjs-ng-${{ matrix.target }}.zip

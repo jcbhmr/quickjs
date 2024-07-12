@@ -1,9 +1,5 @@
-*.a
-*.orig
-*.so
-.obj/
-build/
+# CMake build tree
+/build/
+
 unicode/
 test262_*.txt
-.idea
-cmake-*
