@@ -1,4 +1,4 @@
-name: cmake --workflow --preset test-*
+name: cmake --workflow --preset test:*
 on:
   push:
     # branches: ["main"]
@@ -71,7 +71,7 @@ jobs:
       - uses: goto-bus-stop/setup-zig@v2
       - uses: actions/cache@v4
         with:
-          key: ${{ runner.os }}-${{ hashFiles("**") }}
+          key: ${{ runner.os }}-${{ hashFiles('**') }}
           path: build/${{ matrix.target }}
       - run: cmake --workflow --preset "build:$TARGET"
         env:
