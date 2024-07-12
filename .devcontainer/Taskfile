@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+updateContentCommand() {
+    curl -sS https://webi.sh/zig | sh
+    source ~/.config/envman/PATH.env
+}
+
+"$@"

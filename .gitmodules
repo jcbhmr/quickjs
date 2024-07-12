@@ -2,3 +2,8 @@
 	path = test262
 	url = https://github.com/tc39/test262
 	shallow = true
+[submodule "zig-cmake-toolchain"]
+	path = zig-cmake-toolchain
+	url = https://github.com/jcbhmr/zig-cmake-toolchain.git
+	branch = v2
+	shallow = true

@@ -1,0 +1,40 @@
+{
+  "version": 8,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 29,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "x86_64-linux-musl",
+      "binaryDir": "build/x86_64-linux-musl",
+      "toolchainFile": "cmake/zig-cmake-toolchain/toolchain-zig.cmake",
+      "cacheVariables": {
+        "ZIG_TARGET": "x86_64-linux-musl"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "x86_64-linux-musl",
+      "configurePreset": "x86_64-linux-musl"
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "x86_64-linux-musl",
+      "configurePreset": "x86_64-linux-musl",
+      "generators": ["TGZ"]
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "build-x86_64-linux-musl",
+      "steps": [
+        { "type": "configure", "name": "x86_64-linux-musl" },
+        { "type": "build", "name": "x86_64-linux-musl" }
+      ]
+    }
+  ]
+}
