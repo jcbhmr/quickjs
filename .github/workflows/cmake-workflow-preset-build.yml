@@ -76,13 +76,22 @@ jobs:
         with:
           key: ${{ runner.os }}-${{ hashFiles("**") }}
           path: build/${{ matrix.target }}
-      - run: cmake --workflow --preset "build-$TARGET"
+      - run: cmake --workflow --preset "build:$TARGET"
         env:
           TARGET: ${{ matrix.target }}
-      - run: cpack --preset "build-$TARGET"
+      - run: cmake --workflow --preset "package:$TARGET"
+        env:
+          TARGET: ${{ matrix.target }}
+      - run: |
+          file=$(echo build/"$TARGET"/quickjs-ng-"$TARGET".*)
+          if [[ $file =~ .zip$ ]]; then
+            unzip "$file" -d "build/$TARGET"
+          else
+            tar -xzf "$file" -C "build/$TARGET"
+          fi
         env:
           TARGET: ${{ matrix.target }}
       - uses: actions/upload-artifact@v4
         with:
           name: quickjs-${{ matrix.target }}
-          path: stage/${{ matrix.target }}
+          path: build/${{ matrix.target }}/quickjs-ng-${{ matrix.target }}

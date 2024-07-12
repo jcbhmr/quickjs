@@ -73,6 +73,9 @@ jobs:
         with:
           key: ${{ runner.os }}-${{ hashFiles("**") }}
           path: build/${{ matrix.target }}
-      - run: cmake --workflow --preset "test-$TARGET"
+      - run: cmake --workflow --preset "build:$TARGET"
+        env:
+          TARGET: ${{ matrix.target }}
+      - run: cmake --workflow --preset "test:$TARGET"
         env:
           TARGET: ${{ matrix.target }}

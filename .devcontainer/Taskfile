@@ -4,6 +4,15 @@ set -Eeuo pipefail
 updateContentCommand() {
     curl -sS https://webi.sh/zig | sh
     source ~/.config/envman/PATH.env
+
+    pushd ~
+    git clone https://github.com/emscripten-core/emsdk.git
+    cd emsdk
+    ./emsdk install latest
+    ./emsdk activate latest
+    echo 'source ~/emsdk/emsdk_env.sh' >> ~/.bashrc
+    source ./emsdk_env.sh
+    popd
 }
 
 "$@"

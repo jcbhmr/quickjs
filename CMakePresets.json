@@ -13,27 +13,71 @@
       "cacheVariables": {
         "ZIG_TARGET": "x86_64-linux-musl"
       }
+    },
+    {
+      "name": "wasm32-emscripten",
+      "binaryDir": "build/wasm32-emscripten",
+      "toolchainFile": "$env{EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
+      "cacheVariables": {
+        "CMAKE_CROSSCOMPILING_EMULATOR": "node"
+      }
     }
   ],
   "buildPresets": [
     {
       "name": "x86_64-linux-musl",
       "configurePreset": "x86_64-linux-musl"
+    },
+    {
+      "name": "wasm32-emscripten",
+      "configurePreset": "wasm32-emscripten"
     }
   ],
   "packagePresets": [
     {
       "name": "x86_64-linux-musl",
       "configurePreset": "x86_64-linux-musl",
-      "generators": ["TGZ"]
+      "variables": {
+        "CPACK_PACKAGE_FILE_NAME": "quickjs-ng-x86_64-linux-musl"
+      }
+    },
+    {
+      "name": "wasm32-emscripten",
+      "configurePreset": "wasm32-emscripten",
+      "variables": {
+        "CPACK_PACKAGE_FILE_NAME": "quickjs-ng-wasm32-emscripten"
+      }
     }
   ],
   "workflowPresets": [
     {
-      "name": "build-x86_64-linux-musl",
+      "name": "build:x86_64-linux-musl",
       "steps": [
         { "type": "configure", "name": "x86_64-linux-musl" },
         { "type": "build", "name": "x86_64-linux-musl" }
+      ]
+    },
+    {
+      "name": "package:x86_64-linux-musl",
+      "steps": [
+        { "type": "configure", "name": "x86_64-linux-musl" },
+        { "type": "build", "name": "x86_64-linux-musl" },
+        { "type": "package", "name": "x86_64-linux-musl" }
+      ]
+    },
+    {
+      "name": "build:wasm32-emscripten",
+      "steps": [
+        { "type": "configure", "name": "wasm32-emscripten" },
+        { "type": "build", "name": "wasm32-emscripten" }
+      ]
+    },
+    {
+      "name": "package:wasm32-emscripten",
+      "steps": [
+        { "type": "configure", "name": "wasm32-emscripten" },
+        { "type": "build", "name": "wasm32-emscripten" },
+        { "type": "package", "name": "wasm32-emscripten" }
       ]
     }
   ]

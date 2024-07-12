@@ -1,6 +1,11 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.29)
 
-project(quickjs LANGUAGES C)
+project(quickjs
+    VERSION 0.5.0
+    DESCRIPTION "⚡ The small quick embeddable JavaScript runtime"
+    HOMEPAGE_URL "https://quickjs-ng.github.io/quickjs-ng/"
+    LANGUAGES C
+)
 
 include(CheckCCompilerFlag)
 include(GNUInstallDirs)
@@ -10,6 +15,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 set(CMAKE_C_STANDARD 11)
 
+# If left unset this would be a toolchain-specific default.
 if(NOT CMAKE_BUILD_TYPE)
     message(STATUS "No build type selected, default to Release")
     set(CMAKE_BUILD_TYPE "Release")
@@ -364,3 +370,11 @@ if(NOT IOS)
     install(FILES LICENSE DESTINATION ${CMAKE_INSTALL_DOCDIR})
     install(DIRECTORY examples DESTINATION ${CMAKE_INSTALL_DOCDIR})
 endif()
+
+# CPack
+if(WIN32)
+    set(CPACK_GENERATOR "ZIP")
+else()
+    set(CPACK_GENERATOR "TGZ")
+endif()
+include(CPack)
